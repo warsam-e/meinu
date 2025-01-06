@@ -1,28 +1,38 @@
 {
 	"name": "meinu",
-	"description": "A discord.js wrapper, with a focus on slash commands.",
+	"description": "Simplifies the creation and handling of slash commands in Discord bots.",
 	"author": "S0n1c",
-	"version": "6.13.2",
+	"version": "7.0.0",
+	"license": "MIT",
+	"type": "module",
 	"main": "./dist/index.js",
 	"module": "./dist/index.js",
 	"types": "./dist/index.d.ts",
-	"type": "module",
-	"license": "MIT",
+	"exports": {
+		".": {
+			"import": "./dist/index.js",
+			"require": "./dist/index.js"
+		}
+	},
 	"files": ["dist"],
 	"scripts": {
-		"build": "./build.sh",
-		"dev": "nodemon --exec bun ./tests/index.ts",
-		"lint": "biome check lib"
+		"dev": "nodemon --exec bun ./lib/tests/index.ts",
+		"sharding": "nodemon --exec bun ./lib/tests/sharding.ts",
+		"build:lib": "bun run build.ts",
+		"build:docs": "typedoc --options typedoc.json",
+		"build": "bun build:lib && bun build:docs"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.9.4",
-		"@types/bun": "latest",
-		"typescript": "5.6.3",
-		"nodemon": "3.1.7"
+		"@types/bun": "1.1.14",
+		"nodemon": "3.1.9",
+		"typedoc-github-theme": "0.2.1",
+		"typescript": "5.7.2"
 	},
 	"dependencies": {
-		"chalk": "5.3.0",
-		"discord.js": "14.16.3"
+		"chalk": "5.4.1",
+		"discord.js": "14.17.2",
+		"dotenv": "16.4.7"
 	},
 	"repository": {
 		"type": "git",
@@ -31,5 +41,5 @@
 	"bugs": {
 		"url": "https://github.com/itss0n1c/meinu/issues"
 	},
-	"homepage": "https://github.com/itss0n1c/meinu#readme"
+	"homepage": "https://s0n1c.ca/meinu"
 }

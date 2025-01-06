@@ -9,74 +9,120 @@ import {
 	type ButtonInteraction,
 	type ChatInputCommandInteraction,
 	type Interaction,
+	InteractionContextType,
 	type InteractionResponse,
 	type Message,
 	type MessageContextMenuCommandInteraction,
 	type ModalSubmitInteraction,
 	type UserContextMenuCommandInteraction,
-	InteractionContextType,
 } from 'discord.js';
 import type { Meinu } from '../index.js';
-import { Locales, type PartialLocales, setLocales } from './Locales.js';
+import { Locales, type LocalesPartial, set_locales } from './locales.js';
 
-type CommandResponse = void | Promise<InteractionResponse | void | Message>;
+export type CommandResponse = void | Promise<InteractionResponse | void | Message>;
 
-export interface CommandInteractionHandlers<Inst> {
-	chatInput: (bot: Inst, int: ChatInputCommandInteraction) => CommandResponse;
-	button: (bot: Inst, int: ButtonInteraction) => CommandResponse;
-	modalSubmit: (bot: Inst, int: ModalSubmitInteraction) => CommandResponse;
-	selectMenu: (bot: Inst, int: AnySelectMenuInteraction) => CommandResponse;
-	userContextMenu: (bot: Inst, int: UserContextMenuCommandInteraction) => CommandResponse;
-	messageContextMenu: (bot: Inst, int: MessageContextMenuCommandInteraction) => CommandResponse;
-	autocomplete: (bot: Inst, int: AutocompleteInteraction) => CommandResponse;
+export type InteractionHadlerCB<T extends Interaction, Inst = Meinu> = (bot: Inst, int: T) => CommandResponse;
+
+/**
+ * Typings for interaction handlers.
+ * used in {@link Command.addHandler} method.
+ * @internal
+ */
+export interface CommandInteractionHandlers<Inst = Meinu> {
+	chat_input: InteractionHadlerCB<ChatInputCommandInteraction, Inst>;
+	button: InteractionHadlerCB<ButtonInteraction, Inst>;
+	modal_submit: InteractionHadlerCB<ModalSubmitInteraction, Inst>;
+	select_menu: InteractionHadlerCB<AnySelectMenuInteraction, Inst>;
+	user_context_menu: InteractionHadlerCB<UserContextMenuCommandInteraction, Inst>;
+	message_context_menu: InteractionHadlerCB<MessageContextMenuCommandInteraction, Inst>;
+	autocomplete: InteractionHadlerCB<AutocompleteInteraction, Inst>;
 }
 
-type handler<Inst, T extends keyof CommandInteractionHandlers<Inst>> = Partial<{
+export type CommandHandler<Inst, T extends keyof CommandInteractionHandlers<Inst>> = Partial<{
 	[K in T]: CommandInteractionHandlers<Inst>[K];
 }>;
 
-interface CommandInfoBasics {
+/**
+ * The base info for a command.
+ * @internal
+ */
+export interface CommandInfoBasics {
 	name: string | Locales;
-	ownersOnly?: boolean;
+	/**
+	 * @default false
+	 */
+	owners_only?: boolean;
+	/**
+	 * @default false
+	 */
 	nsfw?: boolean;
 	integration_types?: Array<ApplicationIntegrationType>;
 	contexts?: Array<InteractionContextType>;
 }
 
-interface CommandInfoMessage extends CommandInfoBasics {
+/**
+ * Typings for a command initiated by a message context menu action.
+ * @internal
+ */
+export interface CommandInfoMessage extends CommandInfoBasics {
 	type: ApplicationCommandType.Message;
 }
 
-interface CommandInfoUser extends CommandInfoBasics {
+/**
+ * Typings for a command initiated by a user profile context menu action.
+ * @internal
+ */
+export interface CommandInfoUser extends CommandInfoBasics {
 	type: ApplicationCommandType.User;
 }
 
-interface CommandInfoChat extends CommandInfoBasics {
+/**
+ * Typings for a command initiated by a slash command.
+ * @internal
+ */
+export interface CommandInfoChat extends CommandInfoBasics {
 	type?: ApplicationCommandType.ChatInput;
 	description: string | Locales;
 	options?: ApplicationCommandOptionData[];
 }
 
+/**
+ * Typings for a command.
+ * @internal
+ */
 export type CommandInfo = CommandInfoChat | CommandInfoMessage | CommandInfoUser;
 
+/**
+ * This is used by Meinu internally to export command info to Discord.
+ *
+ * @internal
+ */
 export type CommandInfoExport = CommandInfo & {
 	name: string;
-	nameLocalizations: PartialLocales;
+	nameLocalizations: LocalesPartial;
 	description: string;
-	descriptionLocalizations: PartialLocales;
+	descriptionLocalizations: LocalesPartial;
 	nsfw: boolean;
 	contexts: Array<InteractionContextType> | null;
 };
 
-// eslint-disable-next-line no-unused-vars
-type HasPermission<Inst = Meinu> = (bot: Inst, int: Interaction) => Promise<boolean>;
+/**
+ * Typings for A function that checks if a user has permission to run a command.
+ * @internal
+ */
+export type CommandHasPermission<Inst = Meinu> = (bot: Inst, int: Interaction) => Promise<boolean>;
 
-interface SubCommandGroup<T> {
+export interface CommandSubGroup<T = Command> {
 	name: string | Locales;
 	description: string | Locales;
 	commands: T[];
 }
 
+/**
+ * Command class.
+ * @template Inst - Meinu instance
+ * It's a builder for slash commands, buttons, etc.
+ */
 export class Command<Inst = Meinu> {
 	name: Locales;
 	description: Locales;
@@ -84,33 +130,31 @@ export class Command<Inst = Meinu> {
 	integration_types: ApplicationIntegrationType[];
 	contexts: InteractionContextType[];
 	options: ApplicationCommandOptionData[] = [];
-	// eslint-disable-next-line no-use-before-define
 	subcommands: Command<Inst>[] = [];
-	private handlers: handler<Inst, keyof CommandInteractionHandlers<Inst>> = {};
-	permissionRes: HasPermission<Inst>;
+	#_handlers: CommandHandler<Inst, keyof CommandInteractionHandlers<Inst>> = {};
+	checkPermission: CommandHasPermission<Inst>;
 	ownersOnly: boolean;
-
 	nsfw: boolean;
 
 	constructor(info: CommandInfo) {
-		this.name = info.name instanceof Locales ? info.name : setLocales({ default: info.name });
-		this.ownersOnly = info.ownersOnly ?? false;
+		this.name = info.name instanceof Locales ? info.name : set_locales({ default: info.name });
+		this.ownersOnly = info.owners_only ?? false;
 		info.type = info.type ?? ApplicationCommandType.ChatInput;
 		this.type = info.type;
 		if (info.type === ApplicationCommandType.ChatInput) {
 			this.description =
-				info.description instanceof Locales ? info.description : setLocales({ default: info.description });
+				info.description instanceof Locales ? info.description : set_locales({ default: info.description });
 			this.options = info.options ?? [];
 		} else {
-			this.description = setLocales({ default: '' });
+			this.description = set_locales({ default: '' });
 		}
 		this.integration_types = info.integration_types ?? [];
 		this.contexts = info.contexts ?? [];
-		this.permissionRes = () => Promise.resolve(true);
+		this.checkPermission = () => Promise.resolve(true);
 		this.nsfw = info.nsfw ?? false;
 	}
 
-	private num_sort = (a: number, b: number) => a - b;
+	#_numSort = (a: number, b: number) => a - b;
 
 	get global(): boolean {
 		const integrations_global = [
@@ -125,7 +169,7 @@ export class Command<Inst = Meinu> {
 		return integrations_global && contexts_global;
 	}
 
-	addSubCommandGroup(group: SubCommandGroup<Command<Inst>>): this {
+	addSubCommandGroup(group: CommandSubGroup<Command<Inst>>): this {
 		const opts: Partial<ApplicationCommandOptionData> = {
 			type: ApplicationCommandOptionType.SubcommandGroup,
 			options: group.commands.map((c) => {
@@ -191,8 +235,8 @@ export class Command<Inst = Meinu> {
 		if (this.nsfw) res.nsfw = true;
 
 		res.integration_types =
-			this.integration_types.length > 0 ? this.integration_types.sort(this.num_sort) : undefined;
-		res.contexts = (this.contexts.length > 0 ? this.contexts.sort(this.num_sort) : null) as typeof res.contexts;
+			this.integration_types.length > 0 ? this.integration_types.sort(this.#_numSort) : undefined;
+		res.contexts = (this.contexts.length > 0 ? this.contexts.sort(this.#_numSort) : null) as typeof res.contexts;
 		return res as CommandInfoExport;
 	}
 
@@ -200,12 +244,12 @@ export class Command<Inst = Meinu> {
 		type: T,
 		handler: CommandInteractionHandlers<Inst>[T],
 	): this {
-		this.handlers[type] = handler;
+		this.#_handlers[type] = handler;
 		return this;
 	}
 
-	hasPermission(cb: HasPermission<Inst>): this {
-		this.permissionRes = cb;
+	setPermission(cb: CommandHasPermission<Inst>): this {
+		this.checkPermission = cb;
 		return this;
 	}
 
@@ -214,7 +258,7 @@ export class Command<Inst = Meinu> {
 		bot: Inst,
 		int: Interaction,
 	): Promise<Message | InteractionResponse | void> {
-		if (this.handlers[type])
-			return (this.handlers[type] as CommandInteractionHandlers<Inst>[Type])(bot, int as any);
+		if (this.#_handlers[type])
+			return (this.#_handlers[type] as CommandInteractionHandlers<Inst>[Type])(bot, int as any);
 	}
 }
