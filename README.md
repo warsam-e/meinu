@@ -4,7 +4,7 @@
 <a href="https://www.npmjs.com/package/meinu"><img src="https://img.shields.io/npm/v/meinu?maxAge=3600" alt="npm version" /></a>
 <a href="https://www.npmjs.com/package/meinu"><img src="https://img.shields.io/npm/dt/meinu.svg?maxAge=3600" alt="npm downloads" /></a>
 
-### A discord.js wrapper, with a focus on slash commands.
+### Simplifies the creation and handling of slash commands in Discord bots.
 
 ## Installation
 
