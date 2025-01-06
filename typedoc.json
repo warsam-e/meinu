@@ -1,0 +1,28 @@
+{
+	"entryPoints": ["lib/index.ts"],
+	"out": "docs",
+	"plugin": ["typedoc-github-theme"],
+	"excludeExternals": true,
+	"externalSymbolLinkMappings": {
+		"discord.js": {
+			"*": "https://discord.js.org/docs/packages/discord.js/14.17.2"
+		},
+		"@discordjs/collection": {
+			"*": "https://discord.js.org/docs/packages/collection/main"
+		},
+		"@discordjs/util": {
+			"*": "https://discord.js.org/docs/packages/util/main"
+		},
+		"discord-api-types": {
+			"*": "https://discord-api-types.dev/"
+		},
+		"chalk": {
+			"*": "https://github.com/chalk/chalk"
+		}
+	},
+	"navigationLinks": {
+		"GitHub": "https://github.com/itss0n1c/meinu",
+		"S0n1c": "https://s0n1c.ca"
+	},
+	"customFooterHtml": "<br /><span>Made with ❤️ by <a href='https://s0n1c.ca' rel='noopener noreferrer'>S0n1c</a></span><br />"
+}

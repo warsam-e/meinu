@@ -1,0 +1,25 @@
+import { ApplicationCommandOptionType, Command } from '../../index.js';
+
+export default new Command({
+	name: 'ac',
+	description: 'ac test',
+	options: [
+		{
+			name: 'query',
+			description: 'query',
+			type: ApplicationCommandOptionType.String,
+			required: true,
+			autocomplete: true,
+		},
+	],
+})
+	.addHandler('autocomplete', (bot, int) => {
+		const str = int.options.getString('query', true);
+		return int.respond(
+			str.split('').map((c) => ({
+				name: `${c.toUpperCase()} - ${c}`,
+				value: c,
+			})),
+		);
+	})
+	.addHandler('chat_input', (bot, int) => int.reply(int.options.getString('query', true)));

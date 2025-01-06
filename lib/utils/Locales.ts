@@ -1,20 +1,32 @@
-import type { Locale as DiscordLocale } from 'discord.js';
+import type { Locale as DiscordLocale } from '../index.js';
 
-type Locale = DiscordLocale | 'default';
-export type PartialLocales = Partial<Record<Locale, string>>;
+export type LocalesPartial = Partial<Record<DiscordLocale | 'default', string>>;
 
-export class Locales extends Map<Locale, string> {
-	toJSON(): PartialLocales {
-		const obj: PartialLocales = {};
+/**
+ * A map of locales.
+ *
+ * Used internally to store locales, and convert them to JSON.
+ * @internal
+ */
+export class Locales extends Map<DiscordLocale | 'default', string> {
+	toJSON(): LocalesPartial {
+		const obj: LocalesPartial = {};
 		for (const [key, value] of this) if (key !== 'default') obj[key] = value;
 		return obj;
 	}
 
+	/** get the default value */
 	get default(): string {
 		return this.get('default') ?? '';
 	}
 }
 
-export function setLocales(locales: PartialLocales): Locales {
-	return new Locales(Object.entries(locales).map(([key, value]) => [key as Locale, value] as const));
+/**
+ * Create a new Locales instance from a partial locales object.
+ * @param locales The locales object to create the instance from.
+ */
+export function set_locales(locales: LocalesPartial): Locales {
+	return new Locales(
+		Object.entries(locales).map(([key, value]) => [key as DiscordLocale | 'default', value] as const),
+	);
 }

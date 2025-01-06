@@ -15,7 +15,7 @@
 	"[scss]": {
 		"editor.defaultFormatter": "vscode.css-language-features"
 	},
-	"editor.codeActionsOnSave": ["source.formatDocument", "quickfix.biome"],
+	"editor.codeActionsOnSave": ["source.formatDocument", "quickfix.biome", "source.organizeImports"],
 	"files.insertFinalNewline": true,
 	"files.eol": "\n",
 	"editor.insertSpaces": false,

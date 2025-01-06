@@ -1,3 +1,4 @@
+import chalk, { type ChalkInstance } from 'chalk';
 import {
 	Client,
 	type ClientOptions,
@@ -9,80 +10,111 @@ import {
 	User,
 	resolveColor,
 } from 'discord.js';
-import { type Command, InteractionHandler, _meinu_log } from './utils/index.js';
-import chalk, { type ChalkInstance } from 'chalk';
+import { config } from 'dotenv';
 import packageFile from '../package.json';
-import { register_cmds } from './utils/register.js';
+import { type Command, InteractionHandler } from './utils/index.js';
+import { _meinu_log } from './utils/logging';
+import { _register_cmds } from './utils/register.js';
+
+config();
 
 export interface MeinuOptions {
 	name: string;
 	color: ColorResolvable;
-	clientOptions?: ClientOptions;
+	/**
+	 * Options for the Discord client.
+	 * @default { intents: [GatewayIntentBits.Guilds] }
+	 */
+	client_options?: ClientOptions;
 }
 
+/**
+ * Meinu client class. Extends [discord.js](https://npmjs.com/package/discord.js)'s Client.
+ */
 class Meinu extends Client {
 	name: string;
 	color: ColorResolvable;
+	/** handler for interactions */
 	handler: InteractionHandler | undefined;
 	commands: Collection<string, Command<this>>;
-	meinu_version = packageFile.version;
+	meinuVersion = packageFile.version;
 
 	constructor(opts: MeinuOptions) {
-		if (opts.clientOptions) {
-			super(opts.clientOptions);
+		if (opts.client_options) {
+			super(opts.client_options);
 		} else {
-			super({
-				intents: [GatewayIntentBits.Guilds],
-			});
+			super({ intents: [GatewayIntentBits.Guilds] });
 		}
 		this.name = opts.name;
 		this.color = opts.color;
 		this.commands = new Collection<string, Command<this>>();
 	}
 
-	register_commands(cmds: Command<this>[]): this {
+	/** @returns whether the bot is sharding */
+	get isSharding(): boolean {
+		return this.shard !== null;
+	}
+
+	/** @returns the shard id, if sharding */
+	get shardId(): number | null {
+		return this.shard?.ids.at(0) ?? null;
+	}
+
+	/** @returns the number of guilds the bot is in */
+	async guildCount(): Promise<number> {
+		if (!this.shard) return this.guilds.cache.size;
+		const guilds = await this.shard.fetchClientValues('guilds.cache.size');
+		let num = 0;
+		for (const g of guilds) if (typeof g === 'number') num += g;
+		return num;
+	}
+
+	/** @returns the number of members in all guilds the bot is in */
+	async memberCount(): Promise<number> {
+		if (!this.shard) return this.guilds.cache.reduce((acc, g) => acc + g.memberCount, 0);
+		const members = await this.shard.broadcastEval((c) =>
+			c.guilds.cache.reduce((acc, g) => acc + g.memberCount, 0),
+		);
+		return members.reduce((acc, m) => acc + m, 0);
+	}
+
+	registerCommands(cmds: Command<this>[]): this {
 		for (const cmd of cmds) {
 			this.commands.set(cmd.name.default, cmd);
 		}
 		return this;
 	}
 
-	get bot_chalk(): ChalkInstance {
+	/** @returns the bot's color, as a chalk instance */
+	get botChalk(): ChalkInstance {
 		return chalk.hex(resolveColor(this.color).toString(16));
 	}
 
-	async owners(): Promise<Collection<Snowflake, User>> {
+	/** @returns the bot's owner(s) */
+	get owners(): Collection<Snowflake, User> {
 		if (!this.application) throw new Error('Application is not defined');
-		const app = await this.application.fetch();
-		const { owner } = app;
+		const { owner } = this.application;
 		if (owner instanceof User) return new Collection([[owner.id, owner]]);
 		if (owner instanceof Team) return owner.members.mapValues((m) => m.user);
 		throw new Error('Unknown owner type');
 	}
 
-	findCommand(cmd_name: string): Command<this> | null {
-		const cmd = this.commands.get(cmd_name);
-		if (!cmd) {
-			return null;
-		}
-		return cmd;
-	}
-
+	/** Initializes the bot */
 	async init(_token?: string): Promise<this> {
-		_meinu_log({ title: 'init' }, `Initializing ${this.bot_chalk(this.name)}`);
-		if (typeof Bun.env.TOKEN === 'undefined' && typeof _token === 'undefined') {
-			throw new Error('Token is not defined');
-		}
-		await super.login(_token ?? Bun.env.TOKEN);
+		_meinu_log({ title: 'init', bot: this }, `Initializing ${this.botChalk(this.name)}`);
+		const token = _token ?? process.env.TOKEN;
+		if (token === undefined) throw new Error('Token is not defined');
+		await super.login(token);
+		await this.application?.fetch();
 
 		if (!this.user) {
 			throw new Error('Client user is not defined');
 		}
 
-		await register_cmds(this);
+		await _register_cmds(this);
 
 		this.handler = new InteractionHandler(this);
-		_meinu_log({ title: 'init' }, `Logged in as ${this.bot_chalk(this.user.tag)}!`);
+		_meinu_log({ title: 'init', bot: this }, `Logged in as ${this.botChalk(this.user.tag)}!`);
 		return this;
 	}
 }
@@ -90,4 +122,5 @@ class Meinu extends Client {
 export * from 'discord.js';
 export * from './cmds/index.js';
 export * from './utils/index.js';
+
 export { Meinu };
