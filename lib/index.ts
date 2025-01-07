@@ -73,9 +73,9 @@ class Meinu extends Client {
 	async memberCount(): Promise<number> {
 		if (!this.shard) return this.guilds.cache.reduce((acc, g) => acc + (g.memberCount ?? 0), 0);
 		const members = await this.shard.broadcastEval((c) =>
-			c.guilds.cache.reduce((acc, g) => acc + g.memberCount, 0),
+			c.guilds.cache.reduce((acc, g) => acc + (g.memberCount ?? 0), 0),
 		);
-		return members.reduce((acc, m) => acc + m, 0);
+		return members.reduce((acc, m) => acc + (m ?? 0), 0);
 	}
 
 	registerCommands(cmds: Command<this>[]): this {
