@@ -9,7 +9,7 @@ const build_ts = () =>
 		target: 'node',
 		entrypoints: ['lib/index.ts'],
 		outdir: 'dist',
-		external: ['discord.js', 'chalk', 'dotenv'],
+		packages: 'external',
 		sourcemap: 'linked',
 	});
 
