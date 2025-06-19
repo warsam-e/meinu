@@ -14,7 +14,7 @@ export default <T extends Meinu>() =>
 				required: true,
 			},
 		],
-	}).addHandler('chat_input', (bot, int) => {
+	}).addHandler('chat_input', (_, int) => {
 		const string = int.options.getString('string', true);
 		return int.reply(string);
 	});
