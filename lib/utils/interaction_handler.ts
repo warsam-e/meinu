@@ -111,7 +111,7 @@ export class InteractionHandler {
 					}
 					if (!cmd) throw 404;
 					cmds.push(cmd);
-				} catch (e) {}
+				} catch {}
 			}
 		}
 		if (int.isMessageComponent()) {

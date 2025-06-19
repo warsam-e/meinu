@@ -136,7 +136,7 @@ class Scrollable<Data extends ScrollableDataType> {
 		await _try_prom(
 			this.#_int.editReply({
 				components,
-				...this.#_getPayload(current_content),
+				...this.#_getPayload(current_content, true),
 			}),
 		);
 
@@ -218,7 +218,7 @@ class Scrollable<Data extends ScrollableDataType> {
 			msg = await _try_prom(
 				this.#_int.editReply({
 					components,
-					...this.#_getPayload(current_content),
+					...this.#_getPayload(current_content, true),
 				}),
 			);
 		} else {
@@ -270,7 +270,7 @@ class Scrollable<Data extends ScrollableDataType> {
 		await _try_prom(
 			this.#_int.editReply({
 				components,
-				...this.#_getPayload(current_content),
+				...this.#_getPayload(current_content, true),
 			}),
 		);
 
