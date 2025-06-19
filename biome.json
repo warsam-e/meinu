@@ -1,14 +1,12 @@
 {
-	"$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
-	"organizeImports": {
-		"enabled": false
-	},
+	"$schema": "https://biomejs.dev/schemas/2.0.0/schema.json",
+	"assist": { "actions": { "source": { "organizeImports": "off" } } },
 	"formatter": {
 		"enabled": true,
 		"lineWidth": 120,
 		"indentWidth": 4,
 		"indentStyle": "tab",
-		"ignore": ["dist/", "docs/"]
+		"includes": ["**", "!**/dist/", "!**/docs/"]
 	},
 	"javascript": {
 		"formatter": {
@@ -16,7 +14,7 @@
 		}
 	},
 	"linter": {
-		"ignore": ["dist/", "docs/"],
+		"includes": ["**", "!**/dist/", "!**/docs/"],
 		"enabled": true,
 		"rules": {
 			"recommended": true,
@@ -26,6 +24,18 @@
 			},
 			"correctness": {
 				"noUnusedImports": "error"
+			},
+			"style": {
+				"noParameterAssign": "error",
+				"useAsConstAssertion": "error",
+				"useDefaultParameterLast": "error",
+				"useEnumInitializers": "error",
+				"useSelfClosingElements": "error",
+				"useSingleVarDeclarator": "error",
+				"noUnusedTemplateLiteral": "error",
+				"useNumberNamespace": "error",
+				"noInferrableTypes": "error",
+				"noUselessElse": "error"
 			}
 		}
 	}
