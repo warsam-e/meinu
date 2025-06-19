@@ -2,7 +2,7 @@
 	"name": "meinu",
 	"description": "Simplifies the creation and handling of slash commands in Discord bots.",
 	"author": "S0n1c",
-	"version": "7.0.5",
+	"version": "7.1.0",
 	"license": "GPL-3.0-only",
 	"type": "module",
 	"main": "./dist/index.js",
@@ -14,7 +14,9 @@
 			"require": "./dist/index.js"
 		}
 	},
-	"files": ["dist"],
+	"files": [
+		"dist"
+	],
 	"scripts": {
 		"dev": "nodemon --exec bun ./lib/tests/index.ts",
 		"sharding": "nodemon --exec bun ./lib/tests/sharding.ts",
@@ -23,16 +25,16 @@
 		"build": "bun build:lib && bun build:docs"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "1.9.4",
-		"@types/bun": "1.1.14",
-		"nodemon": "3.1.9",
-		"typedoc-github-theme": "0.2.1",
-		"typescript": "5.7.2"
+		"@biomejs/biome": "2.0.0",
+		"@types/bun": "1.2.16",
+		"nodemon": "3.1.10",
+		"typedoc-github-theme": "0.3.0",
+		"typescript": "5.8.3"
 	},
 	"dependencies": {
 		"chalk": "5.4.1",
-		"discord.js": "14.17.2",
-		"dotenv": "16.4.7"
+		"discord.js": "14.20.0",
+		"dotenv": "16.5.0"
 	},
 	"repository": {
 		"type": "git",

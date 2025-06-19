@@ -13,7 +13,7 @@ const build_ts = () =>
 		sourcemap: 'linked',
 	});
 
-const build_types = () => $`tsc -p .`;
+const build_types = () => $`tsc -p tsconfig.prod.json`;
 
 clear_dist()
 	.then(() => console.log('Cleared dist directory!'))
