@@ -13,7 +13,7 @@ export default new Command({
 		},
 	],
 })
-	.addHandler('autocomplete', (bot, int) => {
+	.addHandler('autocomplete', (_bot, int) => {
 		const str = int.options.getString('query', true);
 		return int.respond(
 			str.split('').map((c) => ({
@@ -22,4 +22,4 @@ export default new Command({
 			})),
 		);
 	})
-	.addHandler('chat_input', (bot, int) => int.reply(int.options.getString('query', true)));
+	.addHandler('chat_input', (_bot, int) => int.reply(int.options.getString('query', true)));

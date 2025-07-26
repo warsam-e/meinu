@@ -10,10 +10,10 @@ const build_ts = () =>
 		entrypoints: ['lib/index.ts'],
 		outdir: 'dist',
 		packages: 'external',
-		sourcemap: 'linked',
+		sourcemap: 'inline',
 	});
 
-const build_types = () => $`tsc -p tsconfig.prod.json`;
+const build_types = () => $`tsc -p tsconfig.json`;
 
 clear_dist()
 	.then(() => console.log('Cleared dist directory!'))

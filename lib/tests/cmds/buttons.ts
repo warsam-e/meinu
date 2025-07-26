@@ -12,8 +12,8 @@ export default new Command({
 				name: 'button1',
 				description: 'Test button 1',
 			})
-				.addHandler('button', (bot, int) => int.reply(int.customId))
-				.addHandler('chat_input', (bot, int) =>
+				.addHandler('button', (_bot, int) => int.reply(int.customId))
+				.addHandler('chat_input', (_bot, int) =>
 					int.reply({
 						components: [
 							new ActionRowBuilder<ButtonBuilder>().addComponents(
@@ -30,8 +30,8 @@ export default new Command({
 				name: 'button2',
 				description: 'Test button 2',
 			})
-				.addHandler('button', (bot, int) => int.reply(int.customId))
-				.addHandler('chat_input', (bot, int) =>
+				.addHandler('button', (_bot, int) => int.reply(int.customId))
+				.addHandler('chat_input', (_bot, int) =>
 					int.reply({
 						components: [
 							new ActionRowBuilder<ButtonBuilder>().addComponents(
@@ -50,8 +50,8 @@ export default new Command({
 			name: 'button3',
 			description: 'Test button 3',
 		})
-			.addHandler('button', (bot, int) => int.reply(int.customId))
-			.addHandler('chat_input', (bot, int) =>
+			.addHandler('button', (_bot, int) => int.reply(int.customId))
+			.addHandler('chat_input', (_bot, int) =>
 				int.reply({
 					components: [
 						new ActionRowBuilder<ButtonBuilder>().addComponents(

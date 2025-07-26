@@ -29,7 +29,7 @@ export interface MeinuOptions {
 }
 
 /**
- * Meinu client class. Extends [discord.js](https://npmjs.com/package/discord.js)'s Client.
+ * Meinu client class. Extends [discord.js](https://npmjs.com/package/discord.js)'s {@link Client}.
  */
 class Meinu extends Client {
 	name: string;
