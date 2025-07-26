@@ -16,7 +16,7 @@ import { type Command, InteractionHandler } from './utils/index.js';
 import { _meinu_log } from './utils/logging';
 import { _register_cmds } from './utils/register.js';
 
-config();
+config({ quiet: true });
 
 export interface MeinuOptions {
 	name: string;
