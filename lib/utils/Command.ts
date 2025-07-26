@@ -157,16 +157,10 @@ export class Command<Inst = Meinu> {
 	#_numSort = (a: number, b: number) => a - b;
 
 	get global(): boolean {
-		const integrations_global = [
-			ApplicationIntegrationType.GuildInstall,
-			ApplicationIntegrationType.UserInstall,
-		].some((i) => this.integration_types.includes(i));
-		const contexts_global = [
-			InteractionContextType.Guild,
-			InteractionContextType.BotDM,
-			InteractionContextType.PrivateChannel,
-		].every((c) => this.contexts.includes(c));
-		return integrations_global && contexts_global;
+		if (ApplicationIntegrationType.UserInstall in this.integration_types) return true;
+		if (InteractionContextType.BotDM in this.contexts) return true;
+		if (InteractionContextType.PrivateChannel in this.contexts) return true;
+		return false;
 	}
 
 	addSubCommandGroup(group: CommandSubGroup<Command<Inst>>): this {

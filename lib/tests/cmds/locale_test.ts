@@ -9,4 +9,4 @@ export default new Command({
 		default: 'Locale test command.',
 		ja: 'ロケールのテスト用コマンドです。',
 	}),
-}).addHandler('chat_input', (bot, int) => int.reply('blah'));
+}).addHandler('chat_input', (_bot, int) => int.reply('blah'));

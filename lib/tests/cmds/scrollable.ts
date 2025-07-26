@@ -10,7 +10,7 @@ import {
 export default new Command({
 	name: 'scrollable',
 	description: 'scrollable content',
-}).addHandler('chat_input', async (bot, int) => {
+}).addHandler('chat_input', async (_bot, int) => {
 	await int.reply('loading...');
 
 	const make_data = (index: number) => ({
