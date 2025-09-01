@@ -1,7 +1,7 @@
-import type { Meinu } from '../index.js';
-import { Command } from '../utils/index.js';
+import type { Echo } from '..';
+import { Command } from '../mod';
 
-export default <T extends Meinu>() =>
+export default <T extends Echo>() =>
 	new Command<T>({
 		name: 'ping',
 		description: 'Pong!',

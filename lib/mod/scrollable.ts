@@ -14,7 +14,7 @@ import {
 	type MessageComponentInteraction,
 	type RepliableInteraction,
 } from 'discord.js';
-import type { AnySelectMenuBuilder } from './util';
+import type { AnySelectMenuBuilder } from './types';
 
 export type ScrollableDataType = Array<Record<string, any>>;
 export type ScrollableDataFn<Data extends ScrollableDataType> = () => Awaitable<Data>;
@@ -284,7 +284,7 @@ class Scrollable<Data extends ScrollableDataType> {
  * See {@link ScrollableData} for required/available options.
  * @example
  * ```ts
- * import {Command, create_scrollable} from 'meinu';
+ * import {Command, create_scrollable} from 'echo';
  *
  * new Command({...})
  * .addHandler("chat_input", (bot, int) => create_scrollable({

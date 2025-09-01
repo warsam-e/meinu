@@ -16,19 +16,19 @@ import {
 	type ModalSubmitInteraction,
 	type UserContextMenuCommandInteraction,
 } from 'discord.js';
-import type { Meinu } from '../index.js';
-import { Locales, type LocalesPartial, set_locales } from './locales.js';
+import type { Echo } from '..';
+import { Locales, type LocalesPartial, set_locales } from './locales';
 
 export type CommandResponse = void | Promise<InteractionResponse | void | Message>;
 
-export type InteractionHadlerCB<T extends Interaction, Inst = Meinu> = (bot: Inst, int: T) => CommandResponse;
+export type InteractionHadlerCB<T extends Interaction, Inst = Echo> = (bot: Inst, int: T) => CommandResponse;
 
 /**
  * Typings for interaction handlers.
  * used in {@link Command.addHandler} method.
  * @internal
  */
-export interface CommandInteractionHandlers<Inst = Meinu> {
+export interface CommandInteractionHandlers<Inst = Echo> {
 	chat_input: InteractionHadlerCB<ChatInputCommandInteraction, Inst>;
 	button: InteractionHadlerCB<ButtonInteraction, Inst>;
 	modal_submit: InteractionHadlerCB<ModalSubmitInteraction, Inst>;
@@ -93,7 +93,7 @@ export interface CommandInfoChat extends CommandInfoBasics {
 export type CommandInfo = CommandInfoChat | CommandInfoMessage | CommandInfoUser;
 
 /**
- * This is used by Meinu internally to export command info to Discord.
+ * This is used by Echo internally to export command info to Discord.
  *
  * @internal
  */
@@ -110,7 +110,7 @@ export type CommandInfoExport = CommandInfo & {
  * Typings for A function that checks if a user has permission to run a command.
  * @internal
  */
-export type CommandHasPermission<Inst = Meinu> = (bot: Inst, int: Interaction) => Promise<boolean>;
+export type CommandHasPermission<Inst = Echo> = (bot: Inst, int: Interaction) => Promise<boolean>;
 
 export interface CommandSubGroup<T = Command> {
 	name: string | Locales;
@@ -120,10 +120,10 @@ export interface CommandSubGroup<T = Command> {
 
 /**
  * Command class.
- * @template Inst - Meinu instance
+ * @template Inst - Echo instance
  * It's a builder for slash commands, buttons, etc.
  */
-export class Command<Inst = Meinu> {
+export class Command<Inst = Echo> {
 	name: Locales;
 	description: Locales;
 	type: CommandInfo['type'];

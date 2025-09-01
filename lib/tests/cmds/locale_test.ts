@@ -1,4 +1,4 @@
-import { Command, set_locales } from '../../index.js';
+import { Command, set_locales } from '../..';
 
 export default new Command({
 	name: set_locales({

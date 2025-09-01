@@ -1,24 +1,24 @@
 import chalk, { type ChalkInstance } from 'chalk';
 import {
-	Client,
-	type ClientOptions,
-	Collection,
-	type ColorResolvable,
-	GatewayIntentBits,
-	type Snowflake,
-	Team,
-	User,
-	resolveColor,
+    Client,
+    type ClientOptions,
+    Collection,
+    type ColorResolvable,
+    GatewayIntentBits,
+    type Snowflake,
+    Team,
+    User,
+    resolveColor,
 } from 'discord.js';
 import { config } from 'dotenv';
-import packageFile from '../package.json';
-import { type Command, InteractionHandler } from './utils/index.js';
-import { _meinu_log } from './utils/logging';
-import { _register_cmds } from './utils/register.js';
+import pkg from '../package.json';
+import { type Command, InteractionHandler } from './mod';
+import { _echo_log } from './mod/logging';
+import { _register_cmds } from './mod/register';
 
 config({ quiet: true });
 
-export interface MeinuOptions {
+export interface EchoOptions {
 	name: string;
 	color: ColorResolvable;
 	/**
@@ -29,17 +29,17 @@ export interface MeinuOptions {
 }
 
 /**
- * Meinu client class. Extends [discord.js](https://npmjs.com/package/discord.js)'s {@link Client}.
+ * Echo client class. Extends [discord.js](https://npmjs.com/package/discord.js)'s {@link Client}.
  */
-class Meinu extends Client {
+class Echo extends Client {
 	name: string;
 	color: ColorResolvable;
 	/** handler for interactions */
 	handler: InteractionHandler | undefined;
 	commands: Collection<string, Command<this>>;
-	meinuVersion = packageFile.version;
+	echoVersion = pkg.version;
 
-	constructor(opts: MeinuOptions) {
+	constructor(opts: EchoOptions) {
 		if (opts.client_options) {
 			super(opts.client_options);
 		} else {
@@ -101,7 +101,7 @@ class Meinu extends Client {
 
 	/** Initializes the bot */
 	async init(_token?: string): Promise<this> {
-		_meinu_log({ title: 'init', bot: this }, `Initializing ${this.botChalk(this.name)}`);
+		_echo_log({ title: 'init', bot: this }, `Initializing ${this.botChalk(this.name)}`);
 		const token = _token ?? process.env.TOKEN;
 		if (token === undefined) throw new Error('Token is not defined');
 		await super.login(token);
@@ -114,13 +114,13 @@ class Meinu extends Client {
 		await _register_cmds(this);
 
 		this.handler = new InteractionHandler(this);
-		_meinu_log({ title: 'init', bot: this }, `Logged in as ${this.botChalk(this.user.tag)}!`);
+		_echo_log({ title: 'init', bot: this }, `Logged in as ${this.botChalk(this.user.tag)}!`);
 		return this;
 	}
 }
 
 export * from 'discord.js';
-export * from './cmds/index.js';
-export * from './utils/index.js';
-
-export { Meinu };
+export * from './cmds';
+export * from './mod';
+export { Echo };
+export default Echo;

@@ -1,4 +1,4 @@
-import { ApplicationCommandType, Command, EmbedBuilder } from '../../index.js';
+import { ApplicationCommandType, Command, EmbedBuilder } from '../..';
 
 export default new Command({
 	name: 'Get PFP',

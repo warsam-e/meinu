@@ -1,11 +1,4 @@
-import {
-	ActionRowBuilder,
-	AttachmentBuilder,
-	ButtonBuilder,
-	ButtonStyle,
-	Command,
-	create_scrollable,
-} from '../../index.js';
+import { ActionRowBuilder, AttachmentBuilder, ButtonBuilder, ButtonStyle, Command, create_scrollable } from '../..';
 
 export default new Command({
 	name: 'scrollable',

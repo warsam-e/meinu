@@ -8,11 +8,11 @@ import {
 	ButtonStyle,
 	Command,
 	type CommandInfo,
-	type Meinu,
+	type Echo,
 	type RepliableInteraction,
-} from '../../index.js';
+} from '../..';
 
-const handle_autocomplete = (_bot: Meinu, int: AutocompleteInteraction) =>
+const handle_autocomplete = (_bot: Echo, int: AutocompleteInteraction) =>
 	int.respond([
 		{
 			name: 'bar',
@@ -28,9 +28,9 @@ const handle_autocomplete = (_bot: Meinu, int: AutocompleteInteraction) =>
 		},
 	]);
 
-const handle_button = (_bot: Meinu, int: ButtonInteraction) => int.reply(int.customId);
+const handle_button = (_bot: Echo, int: ButtonInteraction) => int.reply(int.customId);
 
-const handle_chat = (_bot: Meinu, int: RepliableInteraction) => {
+const handle_chat = (_bot: Echo, int: RepliableInteraction) => {
 	const row = new ActionRowBuilder<ButtonBuilder>().addComponents([
 		new ButtonBuilder().setLabel('blah').setCustomId('ah').setStyle(ButtonStyle.Primary),
 	]);

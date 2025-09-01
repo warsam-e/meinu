@@ -1,25 +1,25 @@
 import {
-	ApplicationCommandOptionType,
-	type ApplicationCommandSubCommandData,
-	type ApplicationCommandSubGroupData,
-	type Interaction,
-	InteractionType,
+    ApplicationCommandOptionType,
+    type ApplicationCommandSubCommandData,
+    type ApplicationCommandSubGroupData,
+    type Interaction,
+    InteractionType,
 } from 'discord.js';
-import type { Meinu } from '../index.js';
-import type { Command, CommandInteractionHandlers } from './command.js';
-import { _meinu_log, green, meinu_color, red } from './logging.js';
+import type { Echo } from '..';
+import type { Command, CommandInteractionHandlers } from './command';
+import { _echo_log, echo_color, green, red } from './logging';
 
 /**
  * Handler for interactions.
  * @internal
  */
 export class InteractionHandler {
-	#_inst: Meinu;
+	#_inst: Echo;
 
 	/**
 	 * @hidden
 	 */
-	constructor(inst: Meinu) {
+	constructor(inst: Echo) {
 		this.#_inst = inst;
 
 		this.#_inst.on('interactionCreate', async (interaction) => {
@@ -72,7 +72,7 @@ export class InteractionHandler {
 		}
 	}
 
-	#_findCommand(cmd_name: string): Command<Meinu> | null {
+	#_findCommand(cmd_name: string): Command<Echo> | null {
 		const cmd = this.#_inst.commands.get(cmd_name);
 		if (!cmd) {
 			return null;
@@ -221,16 +221,16 @@ export class InteractionHandler {
 			return this.#_asyncBool(cmd.checkPermission(this.#_inst, int));
 		};
 		const passed = await check_passes();
-		_meinu_log(
+		_echo_log(
 			{ title: 'interaction_handler', bot: this.#_inst },
-			`${meinu_color(`${int.user.displayName} [${int.user.id}]`)} using ${this.#_inst.botChalk(cmd_name)} → ${
+			`${echo_color(`${int.user.displayName} [${int.user.id}]`)} using ${this.#_inst.botChalk(cmd_name)} → ${
 				passed ? green('passed') : red('failed')
 			}`,
 		);
 		return passed;
 	}
 
-	async #_handleInteraction(type: keyof CommandInteractionHandlers<Meinu>, int: Interaction): Promise<void> {
+	async #_handleInteraction(type: keyof CommandInteractionHandlers<Echo>, int: Interaction): Promise<void> {
 		const cmds = this.resolveCommand(int);
 		if (cmds.length > 0) {
 			const maincmd = cmds[0];

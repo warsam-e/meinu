@@ -8,7 +8,8 @@ import {
 	ModalBuilder,
 	TextInputBuilder,
 	TextInputStyle,
-} from '../../index.js';
+} from '../..';
+
 export default new Command({
 	name: 'modal',
 	description: 'Modal command',

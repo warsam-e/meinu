@@ -1,4 +1,4 @@
-import { Command } from '../../index.js';
+import { Command } from '../..';
 
 export default new Command({
 	name: 'nsfw',

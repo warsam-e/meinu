@@ -1,5 +1,5 @@
 import { inspect } from 'node:util';
-import { ApplicationCommandType, Command } from '../../index.js';
+import { ApplicationCommandType, Command } from '../..';
 
 const user = new Command({
 	name: 'user action',

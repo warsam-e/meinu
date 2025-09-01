@@ -5,7 +5,7 @@
 	"excludeExternals": true,
 	"externalSymbolLinkMappings": {
 		"discord.js": {
-			"*": "https://discord.js.org/docs/packages/discord.js/14.17.2"
+			"*": "https://discord.js.org/docs/packages/discord.js/14.22.1"
 		},
 		"@discordjs/collection": {
 			"*": "https://discord.js.org/docs/packages/collection/main"
@@ -21,8 +21,8 @@
 		}
 	},
 	"navigationLinks": {
-		"GitHub": "https://github.com/itss0n1c/meinu",
-		"S0n1c": "https://s0n1c.ca"
+		"GitHub": "https://github.com/warsam-e/echo",
+		"My Site": "https://warsame.me"
 	},
 	"sort": ["documents-first", "kind"]
 }

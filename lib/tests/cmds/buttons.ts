@@ -1,4 +1,4 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Command } from '../../index.js';
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Command } from '../..';
 
 export default new Command({
 	name: 'buttons',

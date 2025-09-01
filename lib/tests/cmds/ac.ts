@@ -1,4 +1,4 @@
-import { ApplicationCommandOptionType, Command } from '../../index.js';
+import { ApplicationCommandOptionType, Command } from '../..';
 
 export default new Command({
 	name: 'ac',

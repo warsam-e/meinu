@@ -1,5 +1,5 @@
 import { inspect } from 'node:util';
-import { ActionRowBuilder, ApplicationCommandType, ButtonBuilder, ButtonStyle, Command } from '../../index.js';
+import { ActionRowBuilder, ApplicationCommandType, ButtonBuilder, ButtonStyle, Command } from '../..';
 
 export default new Command({
 	name: 'context action',

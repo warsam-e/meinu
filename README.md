@@ -1,24 +1,23 @@
-# Meinu
+# @warsam-e/echo
 
-<a href="https://discord.gg/bMFPpxtMTe"><img src="https://img.shields.io/discord/977286501756968971?color=5865F2&logo=discord&logoColor=white" alt="Discord server" /></a>
-<a href="https://www.npmjs.com/package/meinu"><img src="https://img.shields.io/npm/v/meinu?maxAge=3600" alt="npm version" /></a>
-<a href="https://www.npmjs.com/package/meinu"><img src="https://img.shields.io/npm/dt/meinu.svg?maxAge=3600" alt="npm downloads" /></a>
+<a href="https://www.npmjs.com/package/@warsam-e/echo"><img src="https://img.shields.io/npm/v/@warsam-e/echo?maxAge=300" alt="npm version" /></a>
+<a href="https://www.npmjs.com/package/@warsam-e/echo"><img src="https://img.shields.io/npm/dt/@warsam-e/echo.svg?maxAge=300" alt="npm downloads" /></a>
 
 ### Simplifies the creation and handling of slash commands in Discord bots.
 
 ## Installation
 
 ```zsh
-% bun i meinu
+% bun i @warsam-e/echo
 ```
 
 ## Basic Usage
 
 ```ts
-import { Meinu, Command } from 'meinu';
+import Echo, { Command } from '@warsam-e/echo';
 
 let commands = [
-	new Command<Meinu>({
+	new Command<Echo>({
 		name: 'ping',
 		description: 'Pong!',
 		owners_only: true, // default: false
@@ -39,7 +38,7 @@ let commands = [
 	})
 ];
 
-new Meinu({
+new Echo({
 	name: 'MyBot',
 	color: 'LuminousVividPink',
 })
@@ -48,12 +47,12 @@ new Meinu({
 ```
 
 ## Scrollable
-Meinu includes a class called `Scrollable` which can be used to create scrollable content.
+Echo includes a class called `Scrollable` which can be used to create scrollable content.
 
 To initate this class, you can use the `create_scrollable` function.
 
 ```ts
-import { Command, create_scrollable } from 'meinu';
+import { Command, create_scrollable } from '@warsam-e/echo';
 
 new Command({})
 .addHandler("chat_input", (bot, int) => create_scrollable({

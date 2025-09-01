@@ -1,9 +1,9 @@
 import chalk from 'chalk';
-import type { Awaitable, Meinu } from '../index.js';
+import type { Awaitable, Echo } from '..';
 
-export const meinu_color = chalk.rgb(114, 137, 218);
+export const echo_color = chalk.rgb(114, 137, 218);
 
-export async function _meinu_log(
+export async function _echo_log(
 	{
 		title,
 		cb,
@@ -11,12 +11,12 @@ export async function _meinu_log(
 	}: {
 		title: string;
 		cb?: Awaitable<any>;
-		bot: Meinu | null;
+		bot: Echo | null;
 	},
 	...message: any[]
 ) {
 	const _title = bot?.isSharding ? `#${bot.shard?.ids.join(',')}_${title}` : title;
-	if (typeof cb === 'undefined') return console.log(meinu_color(`[Meinu / ${_title}]`), ...message);
+	if (typeof cb === 'undefined') return console.log(echo_color(`[Echo / ${_title}]`), ...message);
 	console.time(...message);
 	await cb;
 	console.timeEnd(...message);

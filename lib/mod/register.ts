@@ -1,11 +1,11 @@
 import type { ApplicationCommand, Collection, Guild } from 'discord.js';
-import type { Command, Meinu } from '../index.js';
-import type { CommandInfoExport } from './command.js';
-import { _meinu_log } from './logging.js';
+import type { Echo } from '..';
+import type { Command, CommandInfoExport } from './command';
+import { _echo_log } from './logging';
 
-async function _register_global_command<Inst extends Meinu>(bot: Inst, cmds: Collection<string, Command<Inst>>) {
+async function _register_global_command<Inst extends Echo>(bot: Inst, cmds: Collection<string, Command<Inst>>) {
 	if (!bot.application) return;
-	return _meinu_log(
+	return _echo_log(
 		{
 			cb: bot.rest.put(`/applications/${bot.application.id}/commands`, {
 				body: cmds.map((c) => c.commandInfo()),
@@ -17,9 +17,9 @@ async function _register_global_command<Inst extends Meinu>(bot: Inst, cmds: Col
 	);
 }
 
-async function _update_global_command<Inst extends Meinu>(bot: Inst, current: ApplicationCommand, cmd: Command<Inst>) {
+async function _update_global_command<Inst extends Echo>(bot: Inst, current: ApplicationCommand, cmd: Command<Inst>) {
 	if (!bot.application) return;
-	return _meinu_log(
+	return _echo_log(
 		{
 			cb: bot.rest.patch(`/applications/${bot.application.id}/commands/${current.id}`, {
 				body: cmd.commandInfo(),
@@ -43,7 +43,7 @@ function _similar_cmd(cmd: ApplicationCommand, local_cmd: CommandInfoExport) {
 	return orig && compareArrs(integration_types, local_integration_types) && compareArrs(contexts, local_contexts);
 }
 
-async function _register_global<Inst extends Meinu>(bot: Inst, cmds: Collection<string, Command<Inst>>) {
+async function _register_global<Inst extends Echo>(bot: Inst, cmds: Collection<string, Command<Inst>>) {
 	if (!bot.application) return;
 	const cmds_manager = bot.application.commands;
 	await cmds_manager.fetch({
@@ -65,11 +65,11 @@ async function _register_global<Inst extends Meinu>(bot: Inst, cmds: Collection<
 	}
 
 	if (!removing.length && !adding.length && !updating.length) return;
-	await _meinu_log({ title: 'cmds/global', bot }, 'Changes detected for global commands');
+	await _echo_log({ title: 'cmds/global', bot }, 'Changes detected for global commands');
 
 	if (removing.length) {
 		for (const cmd of removing) {
-			await _meinu_log(
+			await _echo_log(
 				{ cb: cmd.delete(), title: 'cmds/delete', bot },
 				`Removing global command ${bot.botChalk(cmd.name)}`,
 			);
@@ -77,7 +77,7 @@ async function _register_global<Inst extends Meinu>(bot: Inst, cmds: Collection<
 	}
 
 	if (adding.length) {
-		await _meinu_log(
+		await _echo_log(
 			{
 				title: 'cmds/global',
 				bot,
@@ -89,7 +89,7 @@ async function _register_global<Inst extends Meinu>(bot: Inst, cmds: Collection<
 	}
 
 	if (updating.length) {
-		await _meinu_log(
+		await _echo_log(
 			{
 				title: 'cmds/global',
 				bot,
@@ -102,13 +102,13 @@ async function _register_global<Inst extends Meinu>(bot: Inst, cmds: Collection<
 		}
 	}
 
-	await _meinu_log(
+	await _echo_log(
 		{ title: 'cmds/global', bot },
 		`Registered ${bot.botChalk(cmds.size.toLocaleString())} global commands`,
 	);
 }
 
-async function _register_guild<Inst extends Meinu>(bot: Inst, guild: Guild, cmds: Collection<string, Command<Inst>>) {
+async function _register_guild<Inst extends Echo>(bot: Inst, guild: Guild, cmds: Collection<string, Command<Inst>>) {
 	const cmds_manager = guild.commands;
 	await cmds_manager.fetch({
 		withLocalizations: true,
@@ -129,11 +129,11 @@ async function _register_guild<Inst extends Meinu>(bot: Inst, guild: Guild, cmds
 	}
 
 	if (!removing.length && !adding.length && !updating.length) return;
-	await _meinu_log({ title: 'cmds/guild', bot }, `Changes detected for guild ${bot.botChalk(guild.name)}`);
+	await _echo_log({ title: 'cmds/guild', bot }, `Changes detected for guild ${bot.botChalk(guild.name)}`);
 
 	if (removing.length) {
 		for (const cmd of removing) {
-			await _meinu_log(
+			await _echo_log(
 				{ cb: cmd.delete(), title: 'cmds/delete', bot },
 				`Removing guild command ${bot.botChalk(cmd.name)} for ${bot.botChalk(guild.name)}`,
 			);
@@ -141,7 +141,7 @@ async function _register_guild<Inst extends Meinu>(bot: Inst, guild: Guild, cmds
 	}
 
 	if (adding.length) {
-		await _meinu_log(
+		await _echo_log(
 			{
 				title: 'cmds/guild',
 				bot,
@@ -150,7 +150,7 @@ async function _register_guild<Inst extends Meinu>(bot: Inst, guild: Guild, cmds
 		);
 
 		for await (const cmd of adding) {
-			await _meinu_log(
+			await _echo_log(
 				{ cb: cmds_manager.create(cmd.commandInfo()), title: 'cmds/adding', bot },
 				`Registering guild command ${bot.botChalk(cmd.name.default)} for ${bot.botChalk(guild.name)}`,
 			);
@@ -158,7 +158,7 @@ async function _register_guild<Inst extends Meinu>(bot: Inst, guild: Guild, cmds
 	}
 
 	if (updating.length) {
-		await _meinu_log(
+		await _echo_log(
 			{
 				title: 'cmds/guild',
 				bot,
@@ -168,7 +168,7 @@ async function _register_guild<Inst extends Meinu>(bot: Inst, guild: Guild, cmds
 
 		for await (const [cmd, find] of updating) {
 			const local_cmd = cmd.commandInfo();
-			await _meinu_log(
+			await _echo_log(
 				{ cb: find.edit(local_cmd), title: 'cmds/update', bot },
 				`Updating guild command ${bot.botChalk(cmd.name.default)} for ${bot.botChalk(guild.name)}`,
 			);
@@ -177,17 +177,17 @@ async function _register_guild<Inst extends Meinu>(bot: Inst, guild: Guild, cmds
 }
 
 /**
- * register commands. Don't call this function directly, Meinu will call this function for you on startup as long as the commands are defined with .registerCommands()
+ * register commands. Don't call this function directly, Echo will call this function for you on startup as long as the commands are defined with .registerCommands()
  * @internal
  */
-export async function _register_cmds<Inst extends Meinu>(bot: Inst) {
+export async function _register_cmds<Inst extends Echo>(bot: Inst) {
 	if (!bot.application) throw new Error('Application is not defined');
 
 	const local_global_commands = bot.commands.filter((c) => c.global);
 	const local_guild_commands = bot.commands.filter((c) => !c.global);
 
 	if (!local_global_commands.size && !local_guild_commands.size)
-		return _meinu_log({ title: 'cmds', bot }, 'No commands to register');
+		return _echo_log({ title: 'cmds', bot }, 'No commands to register');
 
 	if (local_guild_commands.size > 0) {
 		await Promise.all(

@@ -1,8 +1,8 @@
-import { ActivityType, Meinu } from '../index.js';
+import Echo, { ActivityType } from '../index.js';
 import cmds from './cmds/index.js';
 
-const bot = await new Meinu({
-	name: 'Meinu',
+const bot = await new Echo({
+	name: 'Echo Test',
 	color: 'LuminousVividPink',
 })
 	.registerCommands(cmds)

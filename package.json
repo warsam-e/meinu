@@ -1,10 +1,7 @@
 {
-	"name": "meinu",
+	"name": "@warsam-e/echo",
 	"description": "Simplifies the creation and handling of slash commands in Discord bots.",
-	"author": "S0n1c",
 	"version": "7.2.3",
-	"license": "GPL-3.0-only",
-	"type": "module",
 	"main": "./dist/index.js",
 	"module": "./dist/index.js",
 	"types": "./dist/index.d.ts",
@@ -14,33 +11,35 @@
 			"require": "./dist/index.js"
 		}
 	},
+	"type": "module",
+	"license": "MIT",
 	"files": [
 		"dist"
 	],
 	"scripts": {
 		"dev": "bun --watch ./lib/tests/index.ts",
 		"sharding": "bun --watch ./lib/tests/sharding.ts",
-		"build:lib": "bun run build.ts",
+		"build:lib": "tsdown",
 		"build:docs": "typedoc --options typedoc.json",
 		"build": "bun build:lib && bun build:docs"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "2.1.2",
-		"@types/bun": "1.2.19",
-		"typedoc-github-theme": "0.3.0",
-		"typescript": "5.8.3"
+		"@biomejs/biome": "2.2.0",
+		"@types/bun": "1.2.21",
+		"typedoc-github-theme": "0.3.1",
+		"tsdown": "0.14.2"
 	},
 	"dependencies": {
-		"chalk": "5.4.1",
-		"discord.js": "14.21.0",
+		"chalk": "5.6.0",
+		"discord.js": "14.22.1",
 		"dotenv": "17.2.1"
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+ssh://git@github.com/itss0n1c/meinu.git"
+		"url": "git+ssh://git@github.com/warsam-e/echo.git"
 	},
 	"bugs": {
-		"url": "https://github.com/itss0n1c/meinu/issues"
+		"url": "https://github.com/warsam-e/echo/issues"
 	},
-	"homepage": "https://s0n1c.ca/meinu"
+	"homepage": "https://warsame.me/echo"
 }

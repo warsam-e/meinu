@@ -1,14 +1,14 @@
-import { get_default_cmds } from '../../index.js';
-import ac from './ac.js';
-import buttons from './buttons.js';
-import cm from './cm.js';
-import locale_test from './locale_test.js';
-import modal from './modal.js';
-import nsfw_cmd from './nsfw_cmd.js';
-import profile from './profile.js';
-import scrollable from './scrollable.js';
-import sub from './sub.js';
-import user from './user.js';
+import { get_default_cmds } from '../..';
+import ac from './ac';
+import buttons from './buttons';
+import cm from './cm';
+import locale_test from './locale_test';
+import modal from './modal';
+import nsfw_cmd from './nsfw_cmd';
+import profile from './profile';
+import scrollable from './scrollable';
+import sub from './sub';
+import user from './user';
 
 const default_cmds = get_default_cmds();
 
